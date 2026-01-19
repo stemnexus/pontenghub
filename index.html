@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="ms">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NOPONTENG 2026 • Kehadiran & Latihan Buku</title>
+
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --card:#121824;
+      --line:#263044;
+      --text:#eaf0ff;
+      --muted:#9fb0d0;
+
+      --primary-bg:#e0f2fe;   --primary-t:#0369a1; --primary-h:#7dd3fc;
+      --success-bg:#dcfce7;   --success-t:#166534; --success-h:#86efac;
+      --danger-bg:#fee2e2;    --danger-t:#991b1b;  --danger-h:#fca5a5;
+      --secondary-bg:#ede9fe; --secondary-t:#4c1d95; --secondary-h:#c4b5fd;
+
+      --shadow: 0 8px 20px rgba(255,255,255,.08);
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background: radial-gradient(1200px 600px at 20% 10%, rgba(125,211,252,.10), transparent 60%),
+                  radial-gradient(900px 500px at 80% 0%, rgba(196,181,253,.10), transparent 60%),
+                  var(--bg);
+      color:var(--text);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+    }
+
+    .wrap{max-width:1160px;margin:auto;padding:16px}
+    h1{margin:0;font-size:20px;letter-spacing:.2px}
+    .sub{margin:2px 0 0;color:var(--muted);font-size:12px}
+
+    .bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+    .right{margin-left:auto}
+
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 12px;border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(15,21,32,.7);
+      color:var(--muted);
+      font-size:12px;
+      backdrop-filter: blur(6px);
+    }
+    .pill b{color:var(--text)}
+    .ok{color:#86efac}
+    .err{color:#fca5a5}
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:10px;
+    }
+
+    .card{
+      grid-column: span 3;
+      background: rgba(18,24,36,.78);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+      min-height:84px;
+    }
+
+    @media (max-width: 980px){
+      .card{grid-column: span 6;}
+    }
+    @media (max-width: 620px){
+      .card{grid-column: span 12;}
+    }
+
+    label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+    input, select, textarea{
+      width:100%;
+      border-radius:14px;
+      padding:10px 12px;
+      border:1px solid var(--line);
+      background:#0f1520;
+      color:var(--text);
+      outline:none;
+    }
+    textarea{min-height:42px;resize:vertical}
+
+    /* ====== PILL BUTTON SYSTEM (soft bright hover) ====== */
+    .btn{
+      width:100%;
+      padding:10px 16px;
+      border-radius:999px;
+      border:1px solid transparent;
+      font-weight:650;
+      cursor:pointer;
+      transition: background .25s ease, box-shadow .25s ease, transform .15s ease, border-color .25s ease;
+      user-select:none;
+    }
+    .btn:active{transform: translateY(0)}
+    .btn:disabled{opacity:.55;cursor:not-allowed}
+
+    .btn-primary{background:var(--primary-bg); color:var(--primary-t)}
+    .btn-primary:hover{
+      background:var(--primary-h);
+      box-shadow: 0 10px 24px rgba(125,211,252,.35);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary{background:var(--secondary-bg); color:var(--secondary-t)}
+    .btn-secondary:hover{
+      background:var(--secondary-h);
+      box-shadow: 0 10px 24px rgba(196,181,253,.35);
+      transform: translateY(-2px);
+    }
+
+    .btn-success{background:var(--success-bg); color:var(--success-t)}
+    .btn-success:hover{
+      background:var(--success-h);
+      box-shadow: 0 10px 24px rgba(134,239,172,.30);
+      transform: translateY(-2px);
+    }
+
+    .btn-danger{background:var(--danger-bg); color:var(--danger-t)}
+    .btn-danger:hover{
+      background:var(--danger-h);
+      box-shadow: 0 10px 24px rgba(252,165,165,.30);
+      transform: translateY(-2px);
+    }
+
+    .btn:focus{
+      outline:none;
+      box-shadow: 0 0 0 3px rgba(125,211,252,.22);
+    }
+
+    .msg{margin-top:8px;font-size:12px;color:var(--muted)}
+    .msg.ok{color:#86efac}
+    .msg.err{color:#fca5a5}
+
+    /* ====== TABLE ====== */
+    .section{
+      margin-top:12px;
+      background: rgba(18,24,36,.72);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:12px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+    }
+
+    .sectionTop{
+      display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px
+    }
+
+    .mini{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 12px;border-radius:999px;
+      border:1px solid var(--line);
+      background:#0f1520;
+      font-size:12px;color:var(--muted);
+    }
+    .mini b{color:var(--text)}
+
+    table{width:100%;border-collapse:separate;border-spacing:0 8px}
+    th{font-size:12px;color:var(--muted);text-align:left;padding:0 10px}
+    .tr{
+      background:#0f1520;
+      border:1px solid var(--line);
+    }
+    .tr td{
+      padding:10px;
+      border-top:1px solid var(--line);
+      border-bottom:1px solid var(--line);
+      vertical-align:top;
+    }
+    .tr td:first-child{
+      border-left:1px solid var(--line);
+      border-radius:14px 0 0 14px;
+      width:90px;
+      white-space:nowrap;
+      color:#cfe0ff;
+      font-weight:700;
+    }
+    .tr td:last-child{
+      border-right:1px solid var(--line);
+      border-radius:0 14px 14px 0;
+      width:230px;
+    }
+
+    .btnRow{display:flex;gap:8px;flex-wrap:wrap}
+
+    /* smaller pill buttons inside table */
+    .sbtn{
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      font-size:12px;
+      cursor:pointer;
+      transition: background .25s ease, box-shadow .25s ease, transform .15s ease, border-color .25s ease;
+    }
+    .sbtn:hover{transform: translateY(-2px)}
+
+    .sbtn.good{background: rgba(134,239,172,.12); border-color: rgba(134,239,172,.35)}
+    .sbtn.good:hover{box-shadow: 0 10px 22px rgba(134,239,172,.20); background: rgba(134,239,172,.22)}
+    .sbtn.bad{background: rgba(252,165,165,.10); border-color: rgba(252,165,165,.35)}
+    .sbtn.bad:hover{box-shadow: 0 10px 22px rgba(252,165,165,.18); background: rgba(252,165,165,.20)}
+    .sbtn.warn{background: rgba(255,204,102,.10); border-color: rgba(255,204,102,.35)}
+    .sbtn.warn:hover{box-shadow: 0 10px 22px rgba(255,204,102,.16); background: rgba(255,204,102,.18)}
+
+    .sbtn.on{
+      background: rgba(125,211,252,.22);
+      border-color: rgba(125,211,252,.55);
+      box-shadow: 0 10px 22px rgba(125,211,252,.18);
+    }
+
+    .noteBox textarea{min-height:40px;border-radius:14px}
+
+    .footNote{margin-top:8px;color:var(--muted);font-size:12px}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <div class="bar">
+      <div>
+        <h1>NOPONTENG 2026</h1>
+        <div class="sub">Kehadiran + Latihan buku • GitHub Pages → Google Apps Script → Google Sheets</div>
+      </div>
+
+      <span class="pill right">API: <b id="apiState">loading</b></span>
+      <span class="pill">Token POST: <b id="tokenState">set</b></span>
+    </div>
+
+    <!-- TOP INPUTS -->
+    <div class="grid">
+      <div class="card">
+        <label>Tarikh</label>
+        <input id="tarikh" type="date">
+      </div>
+
+      <div class="card">
+        <label>Slot (T1–T14)</label>
+        <select id="slot"></select>
+      </div>
+
+      <div class="card">
+        <label>Kelas</label>
+        <select id="kelas"></select>
+      </div>
+
+      <div class="card">
+        <label>Dicatat oleh</label>
+        <input id="dicatatOleh" placeholder="Contoh: Maria">
+      </div>
+
+      <div class="card" style="grid-column: span 6;">
+        <label>Aksi</label>
+        <div class="btnRow">
+          <button class="btn btn-primary" id="btnLoad">Load murid</button>
+          <button class="btn btn-secondary" id="btnClear">Reset pilihan</button>
+        </div>
+        <div class="msg" id="msgTop"></div>
+      </div>
+
+      <div class="card" style="grid-column: span 6;">
+        <label>Simpan</label>
+        <div class="btnRow">
+          <button class="btn btn-success" id="btnSaveAll">Simpan semua</button>
+          <button class="btn btn-danger" id="btnSaveEmpty">Simpan kosong (force)</button>
+        </div>
+        <div class="msg" id="msgBottom"></div>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="section">
+      <div class="sectionTop">
+        <span class="mini">Jumlah murid: <b id="countMurid">0</b></span>
+        <span class="mini">Kehadiran dipilih: <b id="countHadir">0</b></span>
+        <span class="mini">Latihan dipilih: <b id="countBuku">0</b></span>
+        <span class="mini">Tip: tekan pill ikut status → kemudian Simpan</span>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nama</th>
+            <th style="width:360px">Kehadiran</th>
+            <th style="width:420px">Latihan buku</th>
+            <th>Catatan</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+
+      <div class="footNote">
+        GET: <code>?action=kelas</code>, <code>?action=slot</code>, <code>?action=murid&kelasId=...</code> •
+        POST: <code>saveKehadiran</code>, <code>saveLatihan</code> (token wajib)
+      </div>
+    </div>
+
+  </div>
+
+<script>
+/* =======================
+   CONFIG (IMPORTANT)
+======================= */
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzvH3oDpQszQ0d4ca7uuu1jMIo9jaEidQie70Z8vgTJIXOxncVucd4rjiD8g-PkVZzH/exec";
+const API_TOKEN  = "MARIA2026";
+
+/* =======================
+   STATE
+======================= */
+let muridList = [];              // [{idMurid, nama}]
+let hadirMap  = new Map();       // idMurid -> HADIR/TIDAK_HADIR/LEWAT
+let bukuMap   = new Map();       // idMurid -> HANTAR/TIDAK_HANTAR/TIDAK_BAWA_BUKU
+
+const el = (id)=>document.getElementById(id);
+
+function setMsg(id, text, type=""){
+  const n = el(id);
+  n.textContent = text || "";
+  n.className = "msg " + (type || "");
+}
+
+function todayISO(){
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,"0");
+  const da= String(d.getDate()).padStart(2,"0");
+  return `${y}-${m}-${da}`;
+}
+
+function getHariBM(tarikhISO){
+  // yyyy-mm-dd
+  const d = new Date(tarikhISO + "T00:00:00");
+  const map = ["Ahad","Isnin","Selasa","Rabu","Khamis","Jumaat","Sabtu"];
+  return map[d.getDay()];
+}
+
+async function getJSON(params){
+  const url = WEBAPP_URL + "?" + new URLSearchParams(params).toString();
+  const res = await fetch(url, { method:"GET" });
+  return await res.json();
+}
+
+async function postJSON(body){
+  const res = await fetch(WEBAPP_URL, {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify(body)
+  });
+  return await res.json();
+}
+
+function countSelected(map){
+  let c = 0;
+  for (const v of map.values()) if (v) c++;
+  return c;
+}
+
+function statusBtn(kind, id, val, tone, current){
+  const isOn = String(current||"") === String(val);
+  const onClass = isOn ? "on" : "";
+  const label = val.replaceAll("_"," ");
+  return `<button class="sbtn ${tone} ${onClass}" data-kind="${kind}" data-id="${id}" data-val="${val}">${label}</button>`;
+}
+
+function render(){
+  const tbody = el("tbody");
+  tbody.innerHTML = "";
+
+  muridList.forEach(m=>{
+    const hadir = hadirMap.get(m.idMurid) || "";
+    const buku  = bukuMap.get(m.idMurid) || "";
+
+    const tr = document.createElement("tr");
+    tr.className = "tr";
+    tr.innerHTML = `
+      <td>${m.idMurid}</td>
+      <td style="font-weight:650">${m.nama}</td>
+
+      <td>
+        <div class="btnRow">
+          ${statusBtn("hadir", m.idMurid, "HADIR", "good", hadir)}
+          ${statusBtn("hadir", m.idMurid, "TIDAK_HADIR", "bad", hadir)}
+          ${statusBtn("hadir", m.idMurid, "LEWAT", "warn", hadir)}
+        </div>
+      </td>
+
+      <td>
+        <div class="btnRow">
+          ${statusBtn("buku", m.idMurid, "HANTAR", "good", buku)}
+          ${statusBtn("buku", m.idMurid, "TIDAK_HANTAR", "bad", buku)}
+          ${statusBtn("buku", m.idMurid, "TIDAK_BAWA_BUKU", "warn", buku)}
+        </div>
+      </td>
+
+      <td class="noteBox">
+        <textarea data-note="${m.idMurid}" placeholder="Catatan (optional)"></textarea>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  el("countMurid").textContent = String(muridList.length);
+  el("countHadir").textContent = String(countSelected(hadirMap));
+  el("countBuku").textContent  = String(countSelected(bukuMap));
+
+  // attach handlers for status buttons
+  tbody.querySelectorAll("button[data-kind]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const kind = btn.dataset.kind;
+      const id   = btn.dataset.id;
+      const val  = btn.dataset.val;
+
+      if (kind === "hadir") hadirMap.set(id, val);
+      if (kind === "buku")  bukuMap.set(id, val);
+
+      render();
+    });
+  });
+}
+
+async function init(){
+  el("tarikh").value = todayISO();
+  el("dicatatOleh").value = "Maria";
+
+  // ping
+  try{
+    const ping = await getJSON({ action:"ping" });
+    if (ping.ok){
+      el("apiState").textContent = "ok";
+      el("apiState").className = "ok";
+      setMsg("msgTop","API hidup. Pilih kelas & slot, then Load murid.", "ok");
+    } else {
+      el("apiState").textContent = "error";
+      el("apiState").className = "err";
+      setMsg("msgTop","API error: " + (ping.error||"unknown"), "err");
+    }
+  } catch(e){
+    el("apiState").textContent = "down";
+    el("apiState").className = "err";
+    setMsg("msgTop","Tak dapat connect API. Check WEBAPP_URL.", "err");
+  }
+
+  // load kelas + slot
+  const [kelasRes, slotRes] = await Promise.all([
+    getJSON({ action:"kelas" }),
+    getJSON({ action:"slot" })
+  ]);
+
+  if (!kelasRes.ok) setMsg("msgTop","Gagal load kelas: " + kelasRes.error, "err");
+  if (!slotRes.ok)  setMsg("msgTop","Gagal load slot: " + slotRes.error, "err");
+
+  const kelasSel = el("kelas");
+  kelasSel.innerHTML = "";
+  (kelasRes.data || []).forEach(k=>{
+    const opt = document.createElement("option");
+    opt.value = k.kelasId;
+    opt.textContent = k.namaPaparan || k.kelasId;
+    kelasSel.appendChild(opt);
+  });
+
+  const slotSel = el("slot");
+  slotSel.innerHTML = "";
+  (slotRes.data || []).forEach(s=>{
+    const opt = document.createElement("option");
+    opt.value = s.slotId;
+    opt.textContent = s.label || s.slotId;
+    slotSel.appendChild(opt);
+  });
+}
+
+async function loadMurid(){
+  setMsg("msgTop","Loading murid...", "");
+  const kelasId = el("kelas").value;
+
+  const res = await getJSON({ action:"murid", kelasId });
+  if (!res.ok){
+    setMsg("msgTop","Gagal load murid: " + res.error, "err");
+    return;
+  }
+
+  muridList = res.data || [];
+  hadirMap = new Map();
+  bukuMap  = new Map();
+  render();
+
+  setMsg("msgTop", `Murid loaded (${muridList.length}). Start tick kehadiran/latihan.`, "ok");
+  setMsg("msgBottom","", "");
+}
+
+function resetChoices(){
+  hadirMap = new Map();
+  bukuMap  = new Map();
+  // clear notes too
+  document.querySelectorAll("textarea[data-note]").forEach(t=>t.value="");
+  render();
+  setMsg("msgBottom","Reset done.", "ok");
+}
+
+async function saveAll(forceEmpty=false){
+  const tarikh = el("tarikh").value;
+  const hari   = getHariBM(tarikh);
+  const slotId = el("slot").value;
+  const kelasId= el("kelas").value;
+  const dicatatOleh = (el("dicatatOleh").value || "").trim() || "Maria";
+
+  if (!tarikh || !slotId || !kelasId){
+    setMsg("msgBottom","Tarikh/slot/kelas wajib isi.", "err");
+    return;
+  }
+  if (!muridList.length){
+    setMsg("msgBottom","Belum Load murid.", "err");
+    return;
+  }
+
+  // notes
+  const notes = {};
+  document.querySelectorAll("textarea[data-note]").forEach(t=>{
+    notes[t.dataset.note] = t.value || "";
+  });
+
+  let okCount=0, failCount=0, skipCount=0;
+
+  setMsg("msgBottom","Saving... (jangan tutup tab)", "");
+
+  for (const m of muridList){
+    const hadirStatus = hadirMap.get(m.idMurid) || "";
+    const bukuStatus  = bukuMap.get(m.idMurid) || "";
+
+    // if not force, skip if empty
+    if (!forceEmpty && !hadirStatus && !bukuStatus){
+      skipCount++;
+      continue;
+    }
+
+    // Kehadiran
+    if (forceEmpty || hadirStatus){
+      const body = {
+        token: API_TOKEN,
+        action: "saveKehadiran",
+        payload: {
+          tarikh, hari, slotId, kelasId,
+          idMurid: m.idMurid,
+          nama: m.nama,
+          status: hadirStatus || "", // kosong pun allow kalau force
+          catatan: notes[m.idMurid] || "",
+          dicatatOleh
+        }
+      };
+      const r = await postJSON(body);
+      if (r.ok) okCount++; else failCount++;
+    }
+
+    // Latihan buku
+    if (forceEmpty || bukuStatus){
+      const body2 = {
+        token: API_TOKEN,
+        action: "saveLatihan",
+        payload: {
+          tarikh, hari, slotId, kelasId,
+          idMurid: m.idMurid,
+          nama: m.nama,
+          status: bukuStatus || "",
+          catatan: notes[m.idMurid] || "",
+          dicatatOleh
+        }
+      };
+      const r2 = await postJSON(body2);
+      if (r2.ok) okCount++; else failCount++;
+    }
+  }
+
+  const msg = `Siap. Berjaya: ${okCount} | Gagal: ${failCount} | Skip (tiada pilihan): ${skipCount}`;
+  setMsg("msgBottom", msg, failCount ? "err" : "ok");
+}
+
+// EVENTS
+el("btnLoad").addEventListener("click", loadMurid);
+el("btnClear").addEventListener("click", resetChoices);
+el("btnSaveAll").addEventListener("click", ()=>saveAll(false));
+el("btnSaveEmpty").addEventListener("click", ()=>saveAll(true));
+
+init();
+</script>
+</body>
+</html>
